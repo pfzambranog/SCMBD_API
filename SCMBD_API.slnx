@@ -1,0 +1,5 @@
+<Solution>
+  <Folder Name="/api/">
+    <Project Path="api/SCMBD_API/SCMBD_API.csproj" />
+  </Folder>
+</Solution>

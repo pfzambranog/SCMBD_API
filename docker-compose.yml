@@ -1,0 +1,73 @@
+services:
+
+  sqlserver:
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    container_name: SQL-Docker
+
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "Yape2025!"
+      MSSQL_PID: "Developer"
+      MSSQL_COLLATION: "SQL_Latin1_General_CP1_CI_AI"
+      TZ: "America/Monterrey"
+
+    volumes:
+      - C:\BaseDatos\Docker\SQL-Docker-2025\data:/var/opt/mssql/data
+      - C:\BaseDatos\Docker\SQL-Docker-2025\log:/var/opt/mssql/log
+      - C:\BaseDatos\Docker\SQL-Docker-2025\secrets:/var/opt/mssql/secrets
+      - C:\BaseDatos\Docker\SQL-Docker-2025\backups:/var/backups
+    ##  - C:\BaseDatos\Docker\SQL-Docker-2025\init.sql:/docker-entrypoint-initdb.d/init.sql
+
+    ports:
+      - "15000:1433"
+
+    restart: unless-stopped
+
+    networks:
+      - app_net
+
+    healthcheck:
+      test: ["CMD-SHELL", "pidof sqlservr"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+    extra_hosts:
+      - "scmbd-api:172.18.0.3"
+
+  scmbd-api:
+    build:
+      context: ./api/SCMBD_API
+      dockerfile: Dockerfile
+
+    container_name: scmbd-api
+
+    ports:
+      - "5000:5000"
+      - "5001:5001"
+
+    environment:
+      ASPNETCORE_URLS: "http://0.0.0.0:5000;https://0.0.0.0:5001"
+      ASPNETCORE_Kestrel__Certificates__Default__Path: "/app/cert.pfx"
+      ASPNETCORE_Kestrel__Certificates__Default__Password: "SCMBD_2026"
+      TZ: "America/Monterrey"
+
+    volumes:
+      - C:\BaseDatos\Docker\SQL-Docker-2025\secrets\cert.pfx:/app/cert.pfx:ro
+
+    restart: unless-stopped
+
+    depends_on:
+      - sqlserver
+
+    networks:
+      - app_net
+
+networks:
+  app_net:
+    name: app_net
+    driver: bridge
+    

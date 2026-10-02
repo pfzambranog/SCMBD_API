@@ -1,0 +1,21 @@
+[
+  {
+    "Control": {
+      "BaseDatos": "SCMBD",
+      "PasswordCifrada": "zOPYA8X+kohO24J/rih4to+UmMZVomIrTaNLGfaoK3bgV6zckuomlH3qis8on0Oa",
+      "Puerto": "15000",
+      "Servidor": "192.168.1.20",
+      "Usuario": "SCMBD_Conexion"
+    },
+    "Destino": {
+      "BaseDatos": "Adam",
+      "Manejador": "MSSQL",
+      "PasswordCifrada": "QQBkAGEAbQBWADMA",
+      "Puerto": "15000",
+      "Servidor": "192.168.1.20",
+      "Usuario": "Adam"
+    },
+    "Sql": "SELECT compania, nombre_cia, abreviatura_cia FROM dbo.companias",
+    "Tipo": 1
+  }
+]
